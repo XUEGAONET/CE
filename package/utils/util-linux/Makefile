@@ -518,7 +518,6 @@ CONFIGURE_ARGS += \
 	--without-python		\
 	--without-udev			\
 	--without-readline		\
-	--disable-more			\
 	--with-ncursesw
 
 TARGET_CFLAGS += $(FPIC) -std=gnu99

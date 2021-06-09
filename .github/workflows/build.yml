@@ -36,17 +36,21 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH repo
 
     - name: Update feeds
+      working-directory: /workdir
       run: cd repo && ./scripts/feeds update -a
 
     - name: Install feeds
+      working-directory: /workdir
       run: cd repo && ./scripts/feeds install -a
 
     - name: Download package
+      working-directory: /workdir
       run: |
         cd repo
         make download -j8
 
     - name: Compile
+      working-directory: /workdir
       run: |
         cd repo
         echo -e "$(nproc) core detected, all will be used for compiling"
@@ -54,6 +58,7 @@ jobs:
         echo "compile success"
 
     - name: Organize files
+      working-directory: /workdir
       run: |
         cd repo/bin/targets/*/*
         tar zcvf packages.tar.gz packages/*
@@ -65,7 +70,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.sha }}
+        tag_name: ${{ github.ref }}-${{ github.sha }}
         files: ${{ env.FIRMWARE }}/*
 
 

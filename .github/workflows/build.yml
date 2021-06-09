@@ -54,6 +54,7 @@ jobs:
       run: |
         cd repo
         echo -e "$(nproc) core detected, all will be used for compiling"
+        make defconfig
         make -j$(nproc) || make -j1 V=s
         echo "compile success"
 

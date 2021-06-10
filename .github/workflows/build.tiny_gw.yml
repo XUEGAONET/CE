@@ -2,38 +2,54 @@ name: Build x86_64-TinyGW
 
 on:
   push:
-    branches: [ x86_64-tiny_gw ]
+    branches: [ main-19.07 ]
   pull_request:
-    branches: [ x86_64-tiny_gw ]
+    branches: [ main-19.07 ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/XUEGAONET/CE # ok
-  REPO_BRANCH: x86_64-tiny_gw # ok 
-  TZ: Asia/Shanghai # ok
+  TZ: Asia/Shanghai
 
 jobs:
   build:
     runs-on: ubuntu-18.04
 
     steps:
-    - name: Init Env
+    - name: Show Info
+      run: | 
+        echo "::group::free -m"
+        sudo free -m
+        echo "::endgroup::"
+        echo "::group::lscpu"
+        sudo lscpu
+        echo "::endgroup::"
+        echo "::group::df -h"
+        sudo df -h
+        echo "::endgroup::"
+
+    - name: Create Workdir
+      run: |
+        sudo -E mkdir -p /workdir
+        sudo -E chown ${USER}:${GROUPS} /workdir
+
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+      with:
+        path: /workdir/repo
+
+    - name: Update Permission
+      run: |
+        sudo -E chown ${USER}:${GROUPS} /workdir
+
+    - name: Install Build Tools
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf wget swig rsync
         sudo timedatectl set-timezone "${TZ}"
-        sudo mkdir -p /workdir
-        sudo chown ${USER}:${GROUPS} /workdir
-
-    - name: Checkout Repo
-      working-directory: /workdir
-      run: |
-        df -hT ${PWD}
-        git clone ${REPO_URL} -b ${REPO_BRANCH} repo
 
     - name: Update Feeds
       working-directory: /workdir/repo
@@ -55,7 +71,6 @@ jobs:
       run: |
         echo -e "$(nproc) core detected, all will be used for compiling"
         make -j$(nproc) || make -j1 V=s
-        echo "compile success"
 
     - name: Organize Files
       working-directory: /workdir/repo
@@ -95,8 +110,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}-${{ github.sha }}
-        target_commitish: ${{ github.sha }}
+        tag_name: ${{ github.workflow }}-${{ github.sha }}
         files: ${{ env.FIRMWARE }}/*
         body_path: /workdir/repo/RL.txt
 

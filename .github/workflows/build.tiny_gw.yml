@@ -29,19 +29,12 @@ jobs:
         sudo df -h
         echo "::endgroup::"
 
-    - name: Create Workdir
+    - name: Create Workdir and Checkout
       run: |
         sudo -E mkdir -p /workdir
         sudo -E chown ${USER}:${GROUPS} /workdir
-
-    - name: Checkout Repo
-      uses: actions/checkout@v2
-      with:
-        path: /workdir/repo
-
-    - name: Update Permission
-      run: |
-        sudo -E chown ${USER}:${GROUPS} /workdir
+        cd /workdir
+        git clone ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} repo
 
     - name: Install Build Tools
       env:

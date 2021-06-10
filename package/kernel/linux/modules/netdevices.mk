@@ -1013,3 +1013,23 @@ define KernelPackage/be2net/description
 endef
 
 $(eval $(call KernelPackage,be2net))
+
+define KernelPackage/mlx4
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  TITLE:=Mellanox Technologies 1/10/40Gbit Ethernet support
+  DEPENDS:=@PCI_SUPPORT +kmod-ptp +kmod-i2c-core +kmod-i2c-algo-bit
+  KCONFIG:= \
+    CONFIG_MLX4_CORE \
+    CONFIG_MLX4_EN \
+    CONFIG_MLX4_DEBUG=n
+  FILES:= \
+    $(LINUX_DIR)/drivers/net/ethernet/mellanox/mlx4/mlx4_core.ko \
+    $(LINUX_DIR)/drivers/net/ethernet/mellanox/mlx4/mlx4_en.ko
+  AUTOLOAD:=$(call AutoProbe,mlx4_core mlx4_en)
+endef
+
+define KernelPackage/mlx4/description
+ Kernel modules for Mellanox Technologies 1/10/40Gbit Ethernet adapters, such as Mellanox MCX311A.
+endef
+
+$(eval $(call KernelPackage,mlx4))

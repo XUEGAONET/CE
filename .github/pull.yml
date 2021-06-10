@@ -1,0 +1,6 @@
+version: "1"
+rules:
+  - base: main-19.07
+    upstream: openwrt:openwrt-19.07
+    mergeMethod: merge
+

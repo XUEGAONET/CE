@@ -1,34 +1,29 @@
-  _______                     ________        __
- |       |.-----.-----.-----.|  |  |  |.----.|  |_
- |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|
- |_______||   __|_____|__|__||________||__|  |____|
-          |__| W I R E L E S S   F R E E D O M
- -----------------------------------------------------
+# clearWrt
 
-This is the buildsystem for the OpenWrt Linux distribution.
+## Intro. 
 
-To build your own firmware you need a Linux, BSD or MacOSX system (case
-sensitive filesystem required). Cygwin is unsupported because of the lack
-of a case sensitive file system.
+**based on OpenWrt 19.07 branch**
 
-You need gcc, binutils, bzip2, flex, python, perl, make, find, grep, diff,
-unzip, gawk, getopt, subversion, libz-dev and libc headers installed.
+A customize opearting system based on openwrt which hope for sepcific needs.
 
-1. Run "./scripts/feeds update -a" to obtain all the latest package definitions
-defined in feeds.conf / feeds.conf.default
+For more details, you can visit http://www.openwrt.org.
 
-2. Run "./scripts/feeds install -a" to install symlinks for all obtained
-packages into package/feeds/
+## Differences
 
-3. Run "make menuconfig" to select your preferred configuration for the
-toolchain, target system & firmware packages.
+* Security
+  * RELRO enabled
+  * Aggressive buffer-overflow detection enabled
+  * GCC fotmat-security enabled
+  * Userspace ASLR PIE compilation enabled
+  * PIE enabled by default
+  * Stack-Smashing Protection enabled by default
+* Stability
+  * Soft and hard lockup panic enabled
+  * Auto reboot after panic
+* Routing
+  * Full featured FRRouting intergrated
+* Monitoring
+  * Zabbix agent intergrated
 
-4. Run "make" to build your firmware. This will download all sources, build
-the cross-compile toolchain and then cross-compile the Linux kernel & all
-chosen applications for your target system.
-
-Sunshine!
-	Your OpenWrt Community
-	http://www.openwrt.org
 
 

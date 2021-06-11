@@ -10,14 +10,16 @@ A customized opearting system based on openwrt for special needs such as the sec
 
 ## Usage
 
-:arrow_right: You can visit **[here](https://github.com/XUEGAONET/clearWrt/releases/latest)** to download latest released firmware for installation or upgradation.
+:arrow_right: You can visit **[here](https://github.com/XUEGAONET/clearWrt/releases)** to download the released firmware you need for installation or upgradation.
+
+Please pay attention to the field named `Config Name` which also can be construed as `Profile`. Different `Config Name` will lead to firmware for different usage.
 
 ## Differences
 
 * Security
   * RELRO enabled
   * Aggressive buffer-overflow detection enabled
-  * GCC fotmat-security enabled
+  * GCC format-security enabled
   * Userspace ASLR PIE compilation enabled
   * PIE enabled by default
   * Stack-Smashing Protection enabled by default

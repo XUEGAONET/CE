@@ -75,7 +75,7 @@ jobs:
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
-    - name: Generate Release Log
+    - name: Generate Release Message
       working-directory: /workdir/repo
       run: |
         cd bin/targets/*/*
@@ -105,7 +105,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}-${{ github.sha }}
+        tag_name: ${{ github.sha }}
         files: ${{ env.FIRMWARE }}/*
         body_path: /workdir/repo/RL.txt
 

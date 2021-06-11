@@ -4,9 +4,13 @@
 
 **based on OpenWrt 19.07 branch**
 
-A customize opearting system based on openwrt which hope for sepcific needs.
+A customized opearting system based on openwrt for special needs such as the section below. This repository stays in sync with the upstream and can release the newest version by GitHub Action automatically. So, you can get the newest stable firmware in here. :relaxed:
 
-For more details, you can visit http://www.openwrt.org.
+**For more details, you can visit http://www.openwrt.org.**
+
+## Usage
+
+:arrow_right: You can visit **[here](https://github.com/XUEGAONET/clearWrt/releases/latest)** to download latest released firmware for installation or upgradation.
 
 ## Differences
 

@@ -1,10 +1,11 @@
 name: Build x86_64-TinyGW
 
 on:
-  push:
-    branches: [ main-19.07 ]
+#  push:
+#    branches: [ main-19.07 ]
   pull_request:
     branches: [ main-19.07 ]
+    types: [ closed ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -15,6 +16,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-18.04
+    if: github.event.pull_request.merged == true
 
     steps:
     - name: Show Info

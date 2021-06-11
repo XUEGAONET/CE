@@ -18,7 +18,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-18.04
-    if: ${{ github.event.pull_request.merged == true || github.event.inputs.manual == true }}
+    if: ${{ github.event.pull_request.merged == true }} || ${{ github.event.inputs.manual == true }}
 
     steps:
     - name: Show Info

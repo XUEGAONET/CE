@@ -1,27 +1,18 @@
 name: Build x86_64-TinyGW
 
 on:
-#  push:
-#    branches: [ main-19.07 ]
+  # only use manual trigger
+  push:
   pull_request:
-    branches: [ main-19.07 ]
-    types: [ closed ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    inputs:
-      manual:
-        description: 'Keep to the true'
-        required: true
-        default: 'true'
 
 env:
   TZ: Asia/Shanghai
+  CONF_NAME: tiny_gw.config
 
 jobs:
   build:
     runs-on: ubuntu-18.04
-    if: ${{ github.event.pull_request.merged == true || github.event.inputs.manual == 'true' }}
 
     steps:
     - name: Show Info
@@ -63,7 +54,7 @@ jobs:
       working-directory: /workdir/repo
       run: |
         make defconfig
-        cp build_config/tiny_gw.config .config -f
+        cp build_config/${CONF_NAME} .config -f
         make download -j8
 
     - name: Compile
@@ -89,13 +80,15 @@ jobs:
         # combine git version
         echo ":rocket: **Version:** $(cat version.buildinfo)" >> RL.txt
         rm -rf version.buildinfo
+        # combine config name
+        echo ":full_moon_with_face: **Config Name:** ${GITHUB_WORKFLOW}, ${CONF_NAME}" >> RL.txt
         # combine commit message
         echo ":art: **Commit Message:** " >> RL.txt
         echo '```text' >> RL.txt
         echo "$(git log -1 --format=%s)" >> RL.txt
         echo '```' >> RL.txt
         # combine checksum file
-        echo ":apple: **Checksum:** " >> RL.txt
+        echo ":apple: **SHA256 Checksum:** " >> RL.txt
         echo '```text' >> RL.txt
         echo "$(cat sha256sums)" >> RL.txt
         echo '```' >> RL.txt

@@ -20,6 +20,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: ${{ github.sha }}
-        tag_name: ${{ github.sha }}
+        name: "${{ github.sha }}"
+        tag_name: "${{ github.sha }}"
 

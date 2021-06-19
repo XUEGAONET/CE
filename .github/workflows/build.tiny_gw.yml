@@ -104,9 +104,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: ${{ github.sha }}
-        tag_name: ${{ github.sha }}
+        tag_name: sha-${{ github.sha }}
         files: ${{ env.FIRMWARE }}/*
         body_path: /workdir/repo/RL.txt
-        target_commitish: ${{ github.sha }}
+
 

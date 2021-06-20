@@ -8,7 +8,7 @@ on:
 
 env:
   TZ: Asia/Shanghai
-  CONF_NAME: SEPC_gw.config
+  CONF_NAME: SPEC_gw.config
 
 jobs:
   build:

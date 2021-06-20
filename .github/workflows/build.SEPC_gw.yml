@@ -1,0 +1,124 @@
+name: Build x86_64-SPEC_GW
+
+on:
+  # only use manual trigger
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  TZ: Asia/Shanghai
+  CONF_NAME: SEPC_gw.config
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+    - name: Show Info
+      run: | 
+        echo "::group::free -m"
+        sudo free -m
+        echo "::endgroup::"
+        echo "::group::lscpu"
+        sudo lscpu
+        echo "::endgroup::"
+        echo "::group::df -h"
+        sudo df -h
+        echo "::endgroup::"
+
+    - name: Create Workdir and Checkout
+      run: |
+        sudo -E mkdir -p /workdir
+        sudo -E chown ${USER}:${GROUPS} /workdir
+        cd /workdir
+        git clone ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY} repo
+
+    - name: Install Build Tools
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf wget swig rsync
+        sudo timedatectl set-timezone "${TZ}"
+
+    - name: Install SPEC Dependence
+      working-directory: /workdir/repo
+      run: |
+        mkdir package/SPEC -p
+        git clone https://github.com/coolsnowwolf/lede.git SPEC
+        mv SPEC/package/lean/dns2socks package/SPEC
+        mv SPEC/package/lean/microsocks package/SPEC
+        mv SPEC/package/lean/pdnsd-alt package/SPEC
+        mv SPEC/package/lean/redsocks2 package/SPEC
+        mv SPEC/package/lean/simple-obfs package/SPEC
+        mv SPEC/package/lean/trojan package/SPEC
+        mv SPEC/package/lean/ipt2socks package/SPEC
+
+    - name: Update Feeds
+      working-directory: /workdir/repo
+      run: ./scripts/feeds update -a
+
+    - name: Install Feeds
+      working-directory: /workdir/repo
+      run: ./scripts/feeds install -a
+
+    - name: Download Package
+      working-directory: /workdir/repo
+      run: |
+        make defconfig
+        cp build_config/${CONF_NAME} .config -f
+        make download -j8
+
+    - name: Compile
+      working-directory: /workdir/repo
+      run: |
+        echo -e "$(nproc) core detected, all will be used for compiling"
+        make -j$(nproc) || make -j1 V=s
+
+    - name: Organize Files
+      working-directory: /workdir/repo
+      run: |
+        cd bin/targets/*/*
+        tar zcvf packages.tar.gz packages/*
+        rm -rf packages
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+
+    - name: Generate Release Message
+      working-directory: /workdir/repo
+      run: |
+        cd bin/targets/*/*
+        # combine branch name
+        echo ":alien: **Branch:** $(git branch)" > RL.txt
+        # combine git version
+        echo ":rocket: **Version:** $(cat version.buildinfo)" >> RL.txt
+        rm -rf version.buildinfo
+        # combine config name
+        echo ":full_moon_with_face: **Config Name:** ${GITHUB_WORKFLOW}, ${CONF_NAME}" >> RL.txt
+        # combine commit message
+        echo ":art: **Commit Message:** " >> RL.txt
+        echo '```text' >> RL.txt
+        echo "$(git log -1 --format=%s)" >> RL.txt
+        echo '```' >> RL.txt
+        # combine checksum file
+        echo ":apple: **SHA256 Checksum:** " >> RL.txt
+        echo '```text' >> RL.txt
+        echo "$(cat sha256sums)" >> RL.txt
+        echo '```' >> RL.txt
+        rm -rf sha256sums
+        # combine a blank line
+        echo "" >> RL.txt
+        # move to top dir
+        mv RL.txt ../../../..
+
+    - name: Create Release and Upload
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: sha-${{ github.sha }}
+        files: ${{ env.FIRMWARE }}/*
+        body_path: /workdir/repo/RL.txt
+
+

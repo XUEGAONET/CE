@@ -5,5 +5,5 @@ src-git telephony https://git.openwrt.org/feed/telephony.git;openwrt-19.07
 src-git freifunk https://github.com/freifunk/openwrt-packages.git;openwrt-19.07
 
 src-git extra https://github.com/XUEGAONET/clearWrt-extra.git;main-19.07
-src-git helloworld https://github.com/fw876/helloworld.git;master
+src-git helloworld https://github.com/ic0xgkk/helloworld.git;master
 

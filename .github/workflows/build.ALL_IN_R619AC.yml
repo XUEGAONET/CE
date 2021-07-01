@@ -8,7 +8,7 @@ on:
 
 env:
   TZ: Asia/Shanghai
-  CONF_NAME: SPEC_gw.config
+  CONF_NAME: ALL_IN_R619AC.config
 
 jobs:
   build:

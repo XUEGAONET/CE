@@ -5,10 +5,6 @@
 / {
 	model = "P&W R619AC";
 	compatible = "p2w,r619ac";
-
-	chosen {
-		bootargs-append = " root=/dev/ubiblock0_1 rootfstype=squashfs";
-	};
 };
 
 &rootfs_part1 {

@@ -17,12 +17,12 @@ Please pay attention to the field named `Config Name` which also can be construe
 ## Differences
 
 * Security
-  * RELRO enabled
-  * Aggressive buffer-overflow detection enabled
-  * GCC format-security enabled
-  * Userspace ASLR PIE compilation enabled
-  * PIE enabled by default
-  * Stack-Smashing Protection enabled by default
+  * ~~RELRO enabled~~ deprecated because of effect on performance
+  * ~~Aggressive buffer-overflow detection enabled~~ deprecated because of effect on performance
+  * ~~GCC format-security enabled~~ deprecated because of effect on performance
+  * ~~Userspace ASLR PIE compilation enabled~~ deprecated because of effect on performance
+  * ~~PIE enabled by default~~ deprecated because of effect on performance
+  * ~~Stack-Smashing Protection enabled by default~~ deprecated because of effect on performance
 * Stability
   * Soft and hard lockup panic enabled
   * Auto reboot after panic

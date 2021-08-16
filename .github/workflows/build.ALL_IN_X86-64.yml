@@ -5,8 +5,6 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron:  '0 0 * * 5'
 
 env:
   TZ: Asia/Shanghai
@@ -15,21 +13,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-18.04
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    if: github.event_name == 'workflow_dispatch'
 
     steps:
-    - name: Show Info
-      run: | 
-        echo "::group::free -m"
-        sudo free -m
-        echo "::endgroup::"
-        echo "::group::lscpu"
-        sudo lscpu
-        echo "::endgroup::"
-        echo "::group::df -h"
-        sudo df -h
-        echo "::endgroup::"
-
     - name: Create Workdir and Checkout
       run: |
         sudo -E mkdir -p /workdir
@@ -83,7 +69,7 @@ jobs:
       working-directory: /workdir/repo
       run: |
         cd bin/targets/*/*
-        tar zcvf packages.tar.gz packages/*
+        tar zcvf xuegaonet-packages-${CONF_NAME}.tar.gz packages/*
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
@@ -106,11 +92,13 @@ jobs:
         # combine checksum file
         echo ":apple: **SHA256 Checksum:** " >> RL.txt
         echo '```text' >> RL.txt
-        echo "$(cat sha256sums)" >> RL.txt
+        echo "$(cat sha256sums | grep xuegaonet)" >> RL.txt
         echo '```' >> RL.txt
         rm -rf sha256sums
         # combine a blank line
         echo "" >> RL.txt
+        # create separator
+        echo "---" >> RL.txt
         # move to top dir
         mv RL.txt ../../../..
 
@@ -120,7 +108,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: sha-${{ github.sha }}
-        files: ${{ env.FIRMWARE }}/*
+        files: ${{ env.FIRMWARE }}/xuegaonet-*
         body_path: /workdir/repo/RL.txt
 
 

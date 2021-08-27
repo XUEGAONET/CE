@@ -31,19 +31,6 @@ jobs:
         sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf wget swig rsync
         sudo timedatectl set-timezone "${TZ}"
 
-    - name: Install SPEC Dependence
-      working-directory: /workdir/repo
-      run: |
-        mkdir package/SPEC -p
-        git clone https://github.com/coolsnowwolf/lede.git SPEC
-        mv SPEC/package/lean/dns2socks package/SPEC
-        mv SPEC/package/lean/microsocks package/SPEC
-        mv SPEC/package/lean/pdnsd-alt package/SPEC
-        mv SPEC/package/lean/redsocks2 package/SPEC
-        mv SPEC/package/lean/simple-obfs package/SPEC
-        mv SPEC/package/lean/trojan package/SPEC
-        mv SPEC/package/lean/ipt2socks package/SPEC
-
     - name: Update Feeds
       working-directory: /workdir/repo
       run: ./scripts/feeds update -a

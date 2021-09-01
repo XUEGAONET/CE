@@ -2,11 +2,24 @@
 
 ## Intro. 
 
-**based on OpenWrt 19.07 branch**
+**based on OpenWrt 19.07 stable branch**
 
 A customized opearting system based on openwrt for special needs such as the section below. This repository stays in sync with the upstream and can release the newest version by GitHub Action automatically. So, you can get the newest stable firmware in here. :relaxed:
 
 **For more details, you can visit http://www.openwrt.org.**
+
+## With clearWrt, you can...
+* Support youself's SD-WAN customer edge
+* Support BGP and ECMP cheaply in anywhere
+* Support interface mangment, checking and auto-fix, powered by ifman
+## Support Device
+
+* x86_64
+* PW R619AC, LTS only
+
+## Version Management
+
+After August 30, 2021, all commits will be submitted to the branch with **-dev** suffix. Then it will have a long time testing in pre-production and be mark as pre-release. In the end, it will merge or rebase to the **main** branch for the production. The stable release will be released by **main** branch, and the long-term version will be released in these branch without **-dev** suffix. 
 
 ## Usage
 
@@ -27,9 +40,7 @@ Please pay attention to the field named `Config Name` which also can be construe
   * Soft and hard lockup panic enabled
   * Auto reboot after panic
 * Routing
-  * Full featured FRRouting intergrated
+  * Full featured [FRRouting](https://frrouting.org/) intergrated
+  * Latest [ifman](https://github.com/XUEGAONET/ifman) intergrated
 * Monitoring
   * Zabbix agent intergrated
-
-
-

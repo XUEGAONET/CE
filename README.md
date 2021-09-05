@@ -19,7 +19,7 @@ A customized opearting system based on openwrt for special needs such as the sec
 
 ## Version Management
 
-After August 30, 2021, all commits will be submitted to the branch with **-dev** suffix. Then it will have a long time testing in pre-production and be mark as pre-release. In the end, it will merge or rebase to the **main** branch for the production. The stable release will be released by **main** branch, and the long-term version will be released in these branch without **-dev** suffix. 
+After August 30, 2021, all commits will be submitted to the branch with **main-** prefix. Then it will be mark as pre-release and have a long time testing in pre-production. In the end, it will merge or rebase to the **main** branch for the production and update from pre-release to release. The stable release will be released in **main** branch, and the long-term version will be released in these branch with **main-** prefix. 
 
 ## Usage
 

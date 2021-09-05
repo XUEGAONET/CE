@@ -19,7 +19,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.sha }}
-        path: $GITHUB_WORKSPACE
         fetch-depth: 1
         submodules: true
 
@@ -32,7 +31,6 @@ jobs:
         sudo timedatectl set-timezone "${TZ}"
 
     - name: Install SPEC Dependence
-      working-directory: $GITHUB_WORKSPACE
       run: |
         mkdir package/SPEC -p
         git clone https://github.com/coolsnowwolf/lede.git SPEC
@@ -45,28 +43,23 @@ jobs:
         mv SPEC/package/lean/ipt2socks package/SPEC
 
     - name: Update Feeds
-      working-directory: $GITHUB_WORKSPACE
       run: ./scripts/feeds update -a
 
     - name: Install Feeds
-      working-directory: $GITHUB_WORKSPACE
       run: ./scripts/feeds install -a
 
     - name: Download Package
-      working-directory: $GITHUB_WORKSPACE
       run: |
         make defconfig
         cp build_config/${CONF_NAME} .config -f
         make download -j8
 
     - name: Compile
-      working-directory: $GITHUB_WORKSPACE
       run: |
         echo -e "$(nproc) core detected, all will be used for compiling"
         make -j$(nproc) || make -j1 V=s
 
     - name: Organize Files
-      working-directory: $GITHUB_WORKSPACE
       run: |
         cd bin/targets/*/*
         tar zcvf xuegaonet-packages-${CONF_NAME}.tar.gz packages/*
@@ -74,7 +67,6 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
 
     - name: Generate Release Message
-      working-directory: $GITHUB_WORKSPACE
       run: |
         cd bin/targets/*/*
         # combine branch name
@@ -110,4 +102,4 @@ jobs:
         prerelease: true
         tag_name: sha-${{ github.sha }}
         files: ${{ env.FIRMWARE }}/xuegaonet-*
-        body_path: $GITHUB_WORKSPACE/RL.txt
+        body_path: RL.txt

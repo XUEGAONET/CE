@@ -107,6 +107,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        prerelease: true
         tag_name: sha-${{ github.sha }}
         files: ${{ env.FIRMWARE }}/xuegaonet-*
         body_path: /workdir/repo/RL.txt
